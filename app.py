@@ -5,12 +5,6 @@ from ProductionCode.command_line import *
 app = Flask(__name__)
 app.config['DEBUG'] = True
 
-# https://www.reddit.com/r/flask/comments/gecqww/how_do_you_print_to_console_and_why_is_it_so_hard/
-# https://flask.palletsprojects.com/en/stable/quickstart/#message-flashing
-# https://pythonbasics.org/what-is-flask-python/
-# https://pythonbasics.org/flask-tutorial-hello-world/
-# https://git-scm.com/docs/gitignore#_configuration
-
 @app.route('/')
 def home():
     return "Please look at the README.md to learn what routes to go to!"
