@@ -188,17 +188,18 @@ def main():
 
     args = parser.parse_args()
 
-    match args.user_story:
-        case "b":
-            becca_user_story(args.input)
-        case "n":
-            nafees_user_story(args.input)
-        case "m":
-            may_user_story()
-        case "2":
-            print(top_n_column_values(args.input, int(args.in2)))
-        case _:
-            parser.print_help()
+    print("depreciated")
+    # match args.user_story:
+    #     case "b":
+    #         becca_user_story(args.input)
+    #     case "n":
+    #         nafees_user_story(args.input)
+    #     case "m":
+    #         may_user_story()
+    #     case "2":
+    #         print(top_n_column_values(args.input, int(args.in2)))
+    #     case _:
+    #         parser.print_help()
 
 if __name__ == "__main__":
     main()

@@ -3,7 +3,7 @@
 Put any sources (not included in the assignment) that you referenced in doing this assignment. This includes: websites, people you consulted, and (where sanctioned) GenAI prompts and chatlogs. Include a brief sentence on how you used each resource.
 
 0. https://dba.stackexchange.com/questions/22362/list-all-columns-for-a-specified-table
-    - Helped me dynamically fetch the columns in the table to do my checking!
+    - Helped me dynamically fetch the columns in the table to do my checking! Learned about the information_schema present in the SQL database!
 1. https://www.reddit.com/r/flask/comments/gecqww/how_do_you_print_to_console_and_why_is_it_so_hard/
     - This allowed me to enable print statements during my testing and let me get the strings to check against without having to manually type out the answers.
 2. https://git-scm.com/docs/gitignore#_configuration

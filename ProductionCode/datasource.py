@@ -27,6 +27,14 @@ def connect():
     return connection
 
 def fetch_column_names(connection) -> list:
+    """A helper query to fetch column names in the table.
+    
+    Args:
+        connection: a psycopg2 connection
+
+    Returns:
+        List[n]: A list of all the columns.
+    """
     try:
         cursor = connection.cursor()
         query = "SELECT * FROM information_schema.columns WHERE table_name = 'llmenergy';"
@@ -38,6 +46,14 @@ def fetch_column_names(connection) -> list:
         return None
 
 def fetch_data_length(connection) -> int:
+    """A helper query to fetch the "data length" a.k.a. the number of rows in the table.
+    
+    Args:
+        connection: a psycopg2 connection
+
+    Returns:
+        int: The number of rows in a table, based on the primary key.
+    """
     try:
         cursor = connection.cursor()
         query = "SELECT model_name FROM llmenergy"
@@ -71,12 +87,10 @@ def get_top_n_column_values_SQL(connection, column_of_interest: str, n: int) -> 
             raise ValueError("Input a valid model name.")
 
         if ((column_of_interest == "Model name") | (column_of_interest == "gpu_type") | (column_of_interest == "data_center_region")):
-            # print("FAIL AT FIRST COND")
             raise ValueError("Input a non-numerical column.")
     
-        data_len = fetch_data_length(connection)
-        print(data_len)
         # Ensure data is loaded + handle case where column is not in csv.
+        data_len = fetch_data_length(connection)
         if (n > data_len-1):
             print("FAIL AT SECOND COND")
             raise ValueError("Input a number less than the total length of the row")
@@ -108,17 +122,6 @@ def get_whole_column_SQL(connection, column_of_interest: str) -> list:
         if column_of_interest not in valid_columns:
             raise ValueError("Input a valid model name.")
         
-        # if ((column_of_interest == "Model name") | (column_of_interest == "gpu_type") | (column_of_interest == "data_center_region")):
-        #     # print("FAIL AT FIRST COND")
-        #     raise ValueError("Input a non-numerical column.")
-    
-        # data_len = fetch_data_length(connection)
-        # print(data_len)
-        # # Ensure data is loaded + handle case where column is not in csv.
-        # if (n > data_len-1):
-        #     print("FAIL AT SECOND COND")
-        #     raise ValueError("Input a number less than the total length of the row")
-        
         cursor = connection.cursor()
         query = psysql.SQL("SELECT {column} FROM llmenergy")
         cursor.execute(query.format(column = psysql.Identifier(column_of_interest)))
@@ -139,7 +142,8 @@ def get_row_by_model_name_SQL(connection, model_name_entry) -> list:
         corresponding_row: List. The row corresponding to this model_name
 
     Raises:
-        Exception: SQL exception based on the case.
+        ValueError: If an invalid model name is provided.
+        Exception: SQL exception.
     """
     try:
         cursor = connection.cursor()
@@ -149,11 +153,6 @@ def get_row_by_model_name_SQL(connection, model_name_entry) -> list:
         
         if model_name_entry not in valid_names:
             raise ValueError("Input a valid model name.")
-        # if ((column_of_interest == "Model name") | (column_of_interest == "gpu_type") | (column_of_interest == "data_center_region")):
-        #     # print("FAIL AT FIRST COND")
-        #     raise ValueError("Input a non-numerical column.")
-        
-        # TO-DO: DEBUG ERROR EXCEPTION CHECK FOR WHAT THE NAMES ARE.
 
         query = "SELECT * FROM llmenergy WHERE model_name = %s;"
         cursor.execute(query, (model_name_entry,))
