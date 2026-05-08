@@ -1,9 +1,11 @@
 from flask import Flask, request, redirect, url_for, abort
 import dotenv
+import ProductionCode.datasource as database
 from ProductionCode.command_line import *
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
+conn = database.connect()
 
 @app.route('/')
 def home():
@@ -14,9 +16,11 @@ def home():
 def top_5_columns(column_of_interest):
     try:
         return_string = """"""
-        results = nafees_user_story(column_of_interest)
+        # results = nafees_user_story(column_of_interest)
+        results = database.get_top_n_column_values_SQL(conn, column_of_interest, 5)
+        return_string += f"<h1> Top 5 Models by {column_of_interest} </h1>"
         for result in results:
-            return_string += "<p> " + str(result[0]) + f" in row {result[1]} </p>"
+            return_string += "<p> Model:" + str(result[0]) + f" | {result[1]} </p>"
         return return_string
     
     except ValueError:
@@ -26,9 +30,11 @@ def top_5_columns(column_of_interest):
 def top_n_columns(column_of_interest, n):
     try:
         return_string = """"""
-        results = top_n_column_values(column_of_interest, n)
+        # results = top_n_column_values(column_of_interest, n)
+        results = database.get_top_n_column_values_SQL(conn, column_of_interest, n)
+        return_string += f"<h1> Top 5 Models by {column_of_interest} </h1>"
         for result in results:
-            return_string += "<p>" + str(result[0]) + f" in row {result[1]} </p>"
+            return_string += "<p> Model:" + str(result[0]) + f" | {result[1]} </p>"
         return return_string
 
     except ValueError:

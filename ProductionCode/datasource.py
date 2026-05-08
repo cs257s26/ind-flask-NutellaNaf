@@ -10,7 +10,8 @@ from psycopg2 import sql as psysql
 import psqlConfig as config
 
 def connect():
-    """Establishes a connection to the database with the following credentials:
+    """
+    Establishes a connection to the database with the following credentials:
         user - username, which is also the name of the database
         password - the password for this database on perlman
 
@@ -47,8 +48,6 @@ def fetch_data_length(connection) -> int:
         print ("Something went wrong when executing the query: ", e)
         return None
 
-
-
 def get_top_n_column_values_SQL(connection, column_of_interest: str, n: int) -> list:
     """ 
     Display the top n models in a given column.
@@ -67,6 +66,10 @@ def get_top_n_column_values_SQL(connection, column_of_interest: str, n: int) -> 
         ValueError: A non-numerical column was input OR n is greater than the length-1 of the column.
     """
     try:
+        valid_columns = fetch_column_names(connection)
+        if column_of_interest not in valid_columns:
+            raise ValueError("Input a valid model name.")
+
         if ((column_of_interest == "Model name") | (column_of_interest == "gpu_type") | (column_of_interest == "data_center_region")):
             # print("FAIL AT FIRST COND")
             raise ValueError("Input a non-numerical column.")
@@ -81,6 +84,44 @@ def get_top_n_column_values_SQL(connection, column_of_interest: str, n: int) -> 
         cursor = connection.cursor()
         query = psysql.SQL("SELECT model_name, {column} FROM llmenergy ORDER BY {column} DESC NULLS LAST LIMIT %s;")
         cursor.execute(query.format(column = psysql.Identifier(column_of_interest)), (n,))
+        return cursor.fetchall()
+
+    except Exception as e:
+        print ("Something went wrong when executing the query: ", e)
+        return None
+
+def get_whole_column_SQL(connection, column_of_interest: str) -> list:
+    """ 
+    Get all values in a given column.
+
+    Args:
+        column_of_interest: A string representing the column name
+
+    Returns:
+        column_data: List[] A list of all values in that column. 
+
+    Raises:
+        ValueError: Invalid column was input.
+    """
+    try:
+        valid_columns = fetch_column_names(connection)
+        if column_of_interest not in valid_columns:
+            raise ValueError("Input a valid model name.")
+        
+        # if ((column_of_interest == "Model name") | (column_of_interest == "gpu_type") | (column_of_interest == "data_center_region")):
+        #     # print("FAIL AT FIRST COND")
+        #     raise ValueError("Input a non-numerical column.")
+    
+        # data_len = fetch_data_length(connection)
+        # print(data_len)
+        # # Ensure data is loaded + handle case where column is not in csv.
+        # if (n > data_len-1):
+        #     print("FAIL AT SECOND COND")
+        #     raise ValueError("Input a number less than the total length of the row")
+        
+        cursor = connection.cursor()
+        query = psysql.SQL("SELECT {column} FROM llmenergy")
+        cursor.execute(query.format(column = psysql.Identifier(column_of_interest)))
         return cursor.fetchall()
 
     except Exception as e:
@@ -130,7 +171,7 @@ def main():
     connection = connect()
 
     # Execute a simple query: how many earthquakes above the specified magnitude are there in the data?
-    results = get_top_n_column_values_SQL(connection, "model_parameters_billion", 5)
+    results = get_top_n_column_values_SQL(connection, "nah", 5)
     
     if results is not None:
         print("Query results: ")
