@@ -1,5 +1,12 @@
 # README
 
+## SQL
+Please set up the database with the following psql cmd:
+`\copy llmenergy FROM 'llmenergy.csv' DELIMITER ',' NULL 'NULL' CSV`
+
+Model name,model_parameters_billion,training_tokens_billion,num_gpus,training_hours,hardware_power_draw_watts_per_gpu,carbon_intensity_gco2_per_kwh,total_energy_kwh,total_carbon_footprint_kgco2e
+
+## FLASK
 Individual Flask project by Nafees Abdullah
 
 Info in square brackets [] is info you must supply when navigating to the route! It will also detail the type.
