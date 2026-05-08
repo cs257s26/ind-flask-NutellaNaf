@@ -7,7 +7,7 @@ Boilerplate code (connect(), main()) provided by Amy Csizmar Dalal. Thanks Amy!
 
 import psycopg2 as ps
 from psycopg2 import sql as psysql
-import .psqlConfig as config
+from . import psqlConfig as config
 
 def connect():
     """
