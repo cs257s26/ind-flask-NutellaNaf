@@ -9,6 +9,7 @@ app.config['DEBUG'] = True
 def home():
     return "Please look at the README.md to learn what routes to go to!"
 
+# TO-DO: UPDATE PATHS TO USE THE SQL METHODS/FUNCS; THIS REQUIRES DEBUGGING ABILITY
 @app.route('/<string:column_of_interest>')
 def top_5_columns(column_of_interest):
     try:

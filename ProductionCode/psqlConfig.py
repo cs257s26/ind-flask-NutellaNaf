@@ -1,3 +1,3 @@
 user = 'abdullahn'
 database = 'abdullahn'
-password = ''
+password = 'coffee462water'
