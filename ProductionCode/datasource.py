@@ -78,7 +78,7 @@ def get_top_n_column_values_SQL(connection, column_of_interest: str, n: int) -> 
             raise ValueError("Input a number less than the total length of the row")
         
         cursor = connection.cursor()
-        query = "SELECT model_name, %s FROM llmenergy ORDER BY DESC %s NULLS LAST LIMIT %s;"
+        query = "SELECT model_name, %s FROM llmenergy ORDER BY %s DESC NULLS LAST LIMIT %s;"
         cursor.execute(query, (column_of_interest, column_of_interest, n))
         return cursor.fetchall()
 
