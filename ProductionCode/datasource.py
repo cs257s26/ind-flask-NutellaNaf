@@ -29,7 +29,7 @@ def connect():
 def fetch_column_names(connection) -> list:
     try:
         cursor = connection.cursor()
-        query = "SELECT * FROM information_schema.columns WHERE table_name = llmenergy;"
+        query = "SELECT * FROM information_schema.columns WHERE table_name = 'llmenergy';"
         cursor.execute(query)
         return cursor.fetchall()
 
