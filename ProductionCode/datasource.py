@@ -71,14 +71,14 @@ def get_top_n_column_values_SQL(connection, column_of_interest: str, n: int) -> 
             raise ValueError("Input a non-numerical column.")
     
         data_len = fetch_data_length(connection)
-        
+        print(data_len)
         # Ensure data is loaded + handle case where column is not in csv.
         if (n > data_len-1):
             print("FAIL AT SECOND COND")
             raise ValueError("Input a number less than the total length of the row")
         
         cursor = connection.cursor()
-        query = "SELECT model_name, %s FROM llmenergy ORDER BY %s DESC LIMIT %s;"
+        query = "SELECT model_name, %s FROM llmenergy ORDER BY DESC %s NULLS LAST LIMIT %s;"
         cursor.execute(query, (column_of_interest, column_of_interest, n))
         return cursor.fetchall()
 
