@@ -6,6 +6,7 @@ Boilerplate code (connect(), main()) provided by Amy Csizmar Dalal. Thanks Amy!
 """
 
 import psycopg2 as ps
+from psycopg2 import sql as psysql
 import psqlConfig as config
 
 def connect():
@@ -78,8 +79,8 @@ def get_top_n_column_values_SQL(connection, column_of_interest: str, n: int) -> 
             raise ValueError("Input a number less than the total length of the row")
         
         cursor = connection.cursor()
-        query = "SELECT model_name, %s FROM llmenergy ORDER BY %s DESC NULLS LAST LIMIT %s;"
-        cursor.execute(query, (column_of_interest, column_of_interest, n))
+        query = psysql.SQL("SELECT model_name, {column} FROM llmenergy ORDER BY {column} DESC NULLS LAST LIMIT %s;")
+        cursor.execute(query.format(column = psysql.Identifier(column_of_interest)), (n,))
         return cursor.fetchall()
 
     except Exception as e:
