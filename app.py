@@ -3,7 +3,6 @@ import dotenv
 from ProductionCode.command_line import *
 
 app = Flask(__name__)
-app.config['DEBUG'] = True
 
 @app.route('/')
 def home():
@@ -49,4 +48,6 @@ def fetch_column(column_of_interest):
 def page_not_found(*args, **kwargs):
     return "This is not a valid page! Please review README.md for valid paths and usage."
 
-app.run(debug=True, port=8000)
+if __name__ == '__main__':
+    port = int(sys.argv[1]) if len(sys.argv) > 1 else 5290
+    app.run(host='0.0.0.0', port=port)
