@@ -37,12 +37,18 @@ def fetch_column_names(connection) -> list:
     """
     try:
         cursor = connection.cursor()
-        query = "SELECT * FROM information_schema.columns WHERE table_name = 'llmenergy';"
+        query = """
+            SELECT column_name
+            FROM information_schema.columns
+            WHERE table_name = 'llm_energy';
+        """
         cursor.execute(query)
-        return cursor.fetchall()
+
+        results = cursor.fetchall()
+        return [item[0] for item in results]
 
     except Exception as e:
-        print ("Something went wrong when executing the query: ", e)
+        print("Something went wrong when executing the query: ", e)
         return None
 
 def fetch_data_length(connection) -> int:
@@ -146,18 +152,20 @@ def get_row_by_model_name_SQL(connection, model_name_entry) -> list:
         Exception: SQL exception.
     """
     try:
-        cursor = connection.cursor()
-        query = "SELECT model_name FROM llmenergy;"
-        cursor.execute(query)
-        valid_names = cursor.fetchall()
+        # query = "SELECT model_name FROM llmenergy;"
+        # cursor.execute(query)
+        valid_names = get_whole_column_SQL(connection, "model_name")
+        model_name_tuple = (model_name_entry, )
         
-        if model_name_entry not in valid_names:
+        if model_name_tuple not in valid_names:
             raise ValueError("Input a valid model name.")
 
+        cursor = connection.cursor()
         query = "SELECT * FROM llmenergy WHERE model_name = %s;"
         cursor.execute(query, (model_name_entry,))
         corresponding_row = cursor.fetchall()
-        return corresponding_row
+        column_names = [desc[0] for desc in cursor.description]
+        return [column_names, list(corresponding_row[0])]
 
     except Exception as e:
         print ("Something went wrong when executing the query: ", e)

@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS llmenergy;
 CREATE TABLE llmenergy (
   model_name text PRIMARY KEY,
-  model_parameters_billion int,
+  model_parameters_billion real,
   training_tokens_billion int,
   num_gpus bigint,
   training_hours float,
