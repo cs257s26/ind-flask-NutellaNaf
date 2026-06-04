@@ -26,27 +26,11 @@ Valid columns in the SQL table (and csv file) (case sensitive):
 - `total_energy_kwh`
 - `total_carbon_footprint_kgco2e`
 
-<ins>Flask paths below are not guaranteed to work, given I am unable to debug them on stearns (cannot figure out how to open the local link from the stearns instance)</ins>
-
 ## FLASK
 Individual Flask project by Nafees Abdullah
 
 Info in square brackets [] is info you must supply when navigating to the route! It will also detail the type.
 Example: http://127.0.0.1:[int: PORT]/ requires you to input a port, which is an integer.
-
-Valid columns in the csv (case sensitive) **NOTE: THESE ARE OUTDATED AND LEFT IN FOR ARCHIVAL PURPOSES. PLEASE REFER TO [SQL](#sql) ABOVE TO SEE VALID COLUMNS.**:
-- `Model name`
-- `model_parameters_billion`
-- `training_tokens_billion`
-- `gpu_type`
-- `num_gpus`
-- `training_hours`
-- `data_center_region`
-- `PUE`
-- `hardware_power_draw_watts_per_gpu`
-- `carbon_intensity_gco2_per_kwh`
-- `total_energy_kwh`
-- `total_carbon_footprint_kgco2e`
 
 **Home route: http://127.0.0.1:[int: PORT]/**
 Displays the text "Please look at the README.md to learn what routes to go to!"
@@ -67,10 +51,10 @@ Columns WITHOUT numeric values are:
 - `gpu_type` (depreciated -- no longer exists in my version)
 - `data_center_region` (depreciated -- no longer exists in my version)
 
-**All values in a colum, unsorted: http://127.0.0.1:[int: PORT]/all/[str: column_of_interest]**
+**All values in a column, unsorted: http://127.0.0.1:[int: PORT]/all/[str: column_of_interest]**
 Displays all the unsorted values in a column and their row number. If `column_of_interest`is not within the CSV, you will be redirected to the 404 page instead.
 
-**Values by row, unsorted: http://127.0.0.1:[int: PORT]/models/[str: model_name]**
+**Values by row, unsorted: http://127.0.0.1:[int: PORT]/model/[str: model_name]**
 Displays the row based on a given model name. If `model_name`is not within the CSV, you will be redirected to the 404 page instead.
 
 **404 page: Anything that does not fit the paths above.**

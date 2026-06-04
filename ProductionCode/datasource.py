@@ -49,7 +49,7 @@ def fetch_column_names(connection) -> list:
 
     except Exception as e:
         print("Something went wrong when executing the query: ", e)
-        return None
+        # return None
 
 def fetch_data_length(connection) -> int:
     """A helper query to fetch the "data length" a.k.a. the number of rows in the table.
@@ -67,8 +67,8 @@ def fetch_data_length(connection) -> int:
         return len(cursor.fetchall())
 
     except Exception as e:
-        print ("Something went wrong when executing the query: ", e)
-        return None
+        print (f"Something went wrong when executing the query: {e}")
+        # return None
 
 def get_top_n_column_values_SQL(connection, column_of_interest: str, n: int) -> list:
     """ 
@@ -92,7 +92,7 @@ def get_top_n_column_values_SQL(connection, column_of_interest: str, n: int) -> 
         if column_of_interest not in valid_columns:
             raise ValueError("Input a valid model name.")
 
-        if ((column_of_interest == "Model name") | (column_of_interest == "gpu_type") | (column_of_interest == "data_center_region")):
+        if ((column_of_interest == "model_name") | (column_of_interest == "gpu_type") | (column_of_interest == "data_center_region")):
             raise ValueError("Input a non-numerical column.")
     
         # Ensure data is loaded + handle case where column is not in csv.
@@ -108,7 +108,8 @@ def get_top_n_column_values_SQL(connection, column_of_interest: str, n: int) -> 
 
     except Exception as e:
         print ("Something went wrong when executing the query: ", e)
-        return None
+        # raise ValueError
+        # return None
 
 def get_whole_column_SQL(connection, column_of_interest: str) -> list:
     """ 
@@ -125,7 +126,9 @@ def get_whole_column_SQL(connection, column_of_interest: str) -> list:
     """
     try:
         valid_columns = fetch_column_names(connection)
+        
         if column_of_interest not in valid_columns:
+            print("FALSE!")
             raise ValueError("Input a valid model name.")
         
         cursor = connection.cursor()
@@ -135,7 +138,8 @@ def get_whole_column_SQL(connection, column_of_interest: str) -> list:
 
     except Exception as e:
         print ("Something went wrong when executing the query: ", e)
-        return None
+        raise ValueError("Input a valid model name.")
+        # return None
 
 def get_row_by_model_name_SQL(connection, model_name_entry) -> list:
     """ 
@@ -152,8 +156,6 @@ def get_row_by_model_name_SQL(connection, model_name_entry) -> list:
         Exception: SQL exception.
     """
     try:
-        # query = "SELECT model_name FROM llmenergy;"
-        # cursor.execute(query)
         valid_names = get_whole_column_SQL(connection, "model_name")
         model_name_tuple = (model_name_entry, )
         
@@ -169,7 +171,7 @@ def get_row_by_model_name_SQL(connection, model_name_entry) -> list:
 
     except Exception as e:
         print ("Something went wrong when executing the query: ", e)
-        return None
+        # return None
 
 
 

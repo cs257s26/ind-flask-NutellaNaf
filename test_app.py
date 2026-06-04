@@ -19,12 +19,12 @@ class TestApp(unittest.TestCase):
 
         response = self.app.get('/training_hours', follow_redirects=True) 
         
-        self.assertEqual(b'<p> 2820.0 in row 4 </p><p> 2160.0 in row 2 </p><p> 1928.0 in row 6 </p><p> 1709.0 in row 18 </p><p> 1361.0 in row 5 </p>', response.data)
+        self.assertEqual(b'<h1> Top 5 Models by training_hours </h1><p> Model:BLOOM | 2820.0 </p><p> Model:GPT-4 | 2160.0 </p><p> Model:Llama 3.1 | 1928.0 </p><p> Model:Falcon 180B | 1709.0 </p><p> Model:DeepSeek-V3 | 1361.0 </p>', response.data)
 
     def test_user_story_route_non_numeric(self):
         self.app = app.test_client() 
 
-        response = self.app.get('/Model name', follow_redirects=True) 
+        response = self.app.get('/model_name', follow_redirects=True) 
         
         self.assertEqual(b'This is not a valid page! Please review README.md for valid paths and usage.', response.data) 
 
@@ -42,7 +42,7 @@ class TestApp(unittest.TestCase):
 
         response = self.app.get('/2/training_hours', follow_redirects=True) 
         
-        self.assertEqual(b'<p>2820.0 in row 4 </p><p>2160.0 in row 2 </p>', response.data)
+        self.assertEqual(b'<h1> Top 2 Models by training_hours </h1><p> Model:BLOOM | 2820.0 </p><p> Model:GPT-4 | 2160.0 </p>', response.data)
 
     def test_top_n_in_column_route_invalid_n(self):
         self.app = app.test_client() 
@@ -71,16 +71,16 @@ class TestApp(unittest.TestCase):
 
         response = self.app.get('/all/training_hours', follow_redirects=True) 
 
-        valid_string = b"<p> 355.2 in row 1 </p><p> 2160 in row 2 </p><p> 1200 in row 3 </p><p> 2820 in row 4 </p><p> 1361 in row 5 </p><p> 1928 in row 6 </p><p> Not disclosed in row 7 </p><p> Not disclosed in row 8 </p><p> Not disclosed in row 9 </p><p> Not disclosed in row 10 </p><p> Not disclosed in row 11 </p><p> 480 in row 12 </p><p> 74.4 in row 13 </p><p> 648 in row 14 </p><p> 489.6 in row 15 </p><p> Not specified in row 16 </p><p> Not specified in row 17 </p><p> 1709 in row 18 </p><p> Not specified in row 19 </p><p> Not specified in row 20 </p><p> Not specified in row 21 </p><p> 240 in row 22 </p><p> 1000 in row 23 </p><p> Not specified in row 24 </p><p> Not specified in row 25 </p><p> Not specified in row 26 </p><p> Not specified in row 27 </p>"
+        valid_string = b"""<h1> All values in training_hours </h1><ol><li> Model: GPT-3 | Value: 355.2 </li><li> Model: GPT-4 | Value: 2160.0 </li><li> Model: PaLM | Value: 1200.0 </li><li> Model: BLOOM | Value: 2820.0 </li><li> Model: DeepSeek-V3 | Value: 1361.0 </li><li> Model: Llama 3.1 | Value: 1928.0 </li><li> Model: Claude 3 Opus | Value: None </li><li> Model: Claude 3 Sonnet | Value: None </li><li> Model: Claude 3 Haiku | Value: None </li><li> Model: Gemini 1.0 Ultra | Value: None </li><li> Model: Gemini 1.5 Pro | Value: None </li><li> Model: T5 | Value: 480.0 </li><li> Model: GShard | Value: 74.4 </li><li> Model: Switch | Value: 648.0 </li><li> Model: XLM | Value: 489.6 </li><li> Model: Chinchilla | Value: None </li><li> Model: GLaM | Value: None </li><li> Model: Falcon 180B | Value: 1709.0 </li><li> Model: Mistral 7B | Value: None </li><li> Model: Mixtral 8x7B | Value: None </li><li> Model: Qwen 72B | Value: None </li><li> Model: Yi-34B | Value: 240.0 </li><li> Model: Grok 3 | Value: 1000.0 </li><li> Model: Gopher | Value: None </li><li> Model: OPT-175B | Value: None </li><li> Model: Gemma 7B | Value: None </li><li> Model: Vicuna 7B | Value: None </li></ol>"""
         
         self.assertEqual(valid_string, response.data)
 
     def test_fetch_all_col_route_non_numeric(self):
         self.app = app.test_client() 
 
-        response = self.app.get('/all/Model name', follow_redirects=True) 
+        response = self.app.get('/all/model_name', follow_redirects=True) 
         
-        valid_string = b"""<p> GPT-3 in row 1 </p><p> GPT-4 in row 2 </p><p> PaLM in row 3 </p><p> BLOOM in row 4 </p><p> DeepSeek-V3 in row 5 </p><p> Llama 3.1 in row 6 </p><p> Claude 3 Opus in row 7 </p><p> Claude 3 Sonnet in row 8 </p><p> Claude 3 Haiku in row 9 </p><p> Gemini 1.0 Ultra in row 10 </p><p> Gemini 1.5 Pro in row 11 </p><p> T5 in row 12 </p><p> GShard in row 13 </p><p> Switch in row 14 </p><p> XLM in row 15 </p><p> Chinchilla in row 16 </p><p> GLaM in row 17 </p><p> Falcon 180B in row 18 </p><p> Mistral 7B in row 19 </p><p> Mixtral 8x7B in row 20 </p><p> Qwen 72B in row 21 </p><p> Yi-34B in row 22 </p><p> Grok 3 in row 23 </p><p> Gopher in row 24 </p><p> OPT-175B in row 25 </p><p> Gemma 7B in row 26 </p><p> Vicuna 7B in row 27 </p>"""
+        valid_string = b"""<h1> All values in model_name </h1><ol><li> Model: GPT-3 | Value: GPT-3 </li><li> Model: GPT-4 | Value: GPT-4 </li><li> Model: PaLM | Value: PaLM </li><li> Model: BLOOM | Value: BLOOM </li><li> Model: DeepSeek-V3 | Value: DeepSeek-V3 </li><li> Model: Llama 3.1 | Value: Llama 3.1 </li><li> Model: Claude 3 Opus | Value: Claude 3 Opus </li><li> Model: Claude 3 Sonnet | Value: Claude 3 Sonnet </li><li> Model: Claude 3 Haiku | Value: Claude 3 Haiku </li><li> Model: Gemini 1.0 Ultra | Value: Gemini 1.0 Ultra </li><li> Model: Gemini 1.5 Pro | Value: Gemini 1.5 Pro </li><li> Model: T5 | Value: T5 </li><li> Model: GShard | Value: GShard </li><li> Model: Switch | Value: Switch </li><li> Model: XLM | Value: XLM </li><li> Model: Chinchilla | Value: Chinchilla </li><li> Model: GLaM | Value: GLaM </li><li> Model: Falcon 180B | Value: Falcon 180B </li><li> Model: Mistral 7B | Value: Mistral 7B </li><li> Model: Mixtral 8x7B | Value: Mixtral 8x7B </li><li> Model: Qwen 72B | Value: Qwen 72B </li><li> Model: Yi-34B | Value: Yi-34B </li><li> Model: Grok 3 | Value: Grok 3 </li><li> Model: Gopher | Value: Gopher </li><li> Model: OPT-175B | Value: OPT-175B </li><li> Model: Gemma 7B | Value: Gemma 7B </li><li> Model: Vicuna 7B | Value: Vicuna 7B </li></ol>"""
 
         self.assertEqual(valid_string, response.data) 
 
